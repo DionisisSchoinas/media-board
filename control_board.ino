@@ -115,7 +115,7 @@ void loop() {
 
 void detectJoystickMovement() {
   int xMov = getMappedJoystickValue(joystick_X.getPinValue());
-  int yMov = getMappedJoystickValue(joystick_Y.getPinValue());
+  int yMov = -getMappedJoystickValue(joystick_Y.getPinValue());
 
   // Scroll wheel Up/Down  
   if (xMov != 0 && joystick_X.hasTimePassed()) {
