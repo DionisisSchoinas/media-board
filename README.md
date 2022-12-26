@@ -1,7 +1,7 @@
 
 # Libraries
 * **HID-Project**  (https://github.com/NicoHood/HID)
-	Added via Package Manager
+	Added via Package Manager 1
 
 
 # What are the shortcuts ?
