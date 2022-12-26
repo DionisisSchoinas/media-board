@@ -46,8 +46,12 @@ AdvancedDigitalPin joystickSW(JOYSTICK_SW, INPUT_PULLUP, 100);
 AdvancedAnalogPin joystick_X(JOYSTICK_X, INPUT, 100);
 AdvancedAnalogPin joystick_Y(JOYSTICK_Y, INPUT, 100);
 
+int joystickMappedValues[] = {0, 1, 5, 15};
+int repeatDelay = 250;
+unsigned long lastRepeat = 0;
+
 void setup() {
-  Serial.begin(9600);
+  //Serial.begin(9600);
   Keyboard.begin();
   Mouse.begin();
   Consumer.begin();
@@ -68,14 +72,14 @@ void loop() {
     asm volatile ("jmp 0");
   
   // Left Ctrl + m
-  if (isFirstPress(button1)){
+  if (isFirstPress(button1)) {
     Keyboard.press(KEY_LEFT_CTRL);
     Keyboard.press('m');
     Keyboard.releaseAll();
   }
 
   // Left Ctrl + Left Alt + Left Windows Key + m
-  if (isFirstPress(button2)){
+  if (isFirstPress(button2)) {
     Keyboard.press(KEY_LEFT_CTRL);
     Keyboard.press(KEY_LEFT_ALT);
     Keyboard.press(KEY_LEFT_GUI);
@@ -85,7 +89,7 @@ void loop() {
     digitalWrite(BUTTON_2_LED_PIN, !digitalRead(BUTTON_2_LED_PIN));
   }
   
-  // Consumer Play/Pause
+  
   if (isFirstPress(button3)){
     Consumer.press(MEDIA_PLAY_PAUSE);
     Consumer.release(MEDIA_PLAY_PAUSE);
@@ -154,13 +158,12 @@ void volumeAdjust() {
 }
 
 void zoomAdjust() {
-  int rot = checkEncoderRotation(zoomEncoderCLK, zoomEncoderDT);
-  
-  if (rot != zoomChange.getState() && !zoomChange.hasTimePassed())
+  int rotation = checkEncoderRotation(zoomEncoderCLK, zoomEncoderDT);  
+  if (rotation != zoomChange.getState() && !zoomChange.hasTimePassed())
     return;
-  zoomChange.setState(rot);
+  zoomChange.setState(rotation);
 
-  switch (rot) {
+  switch (rotation) {
     case 1:
       // Left Ctrl + Numpad '+'
       Keyboard.press(KEY_LEFT_CTRL);
@@ -181,23 +184,42 @@ int getMappedJoystickValue(int pinValue) {
     return 0;
 
   if (pinValue <= 30) // [0,30] = 31
-    return -40;
+    return -getMappedJoystickValueWithDelay(3);
   if (pinValue <= 100) // (30,100] = 70
-    return -15;
+    return -getMappedJoystickValueWithDelay(2);
   else if (pinValue <= 250) // (100,250] = 150
-    return -5;
+    return -getMappedJoystickValueWithDelay(1);
   else if (pinValue <= 490) // (250,490] = 240
-    return -1;
+    return -getMappedJoystickValueWithDelay(0);
   else if (pinValue <= 530) // (490,530]  20--(511)--20 = 39
     return 0;
   else if (pinValue <= 770) // (530,770] = 240
-    return 1;
+    return getMappedJoystickValueWithDelay(0);
   else if (pinValue <= 920) // (770,920] = 150
-    return 5;
+    return getMappedJoystickValueWithDelay(1);
   else if (pinValue <= 990) // (920,990] = 70
-    return 15;
+    return getMappedJoystickValueWithDelay(2);
   else // (990,1023] = 33
-    return 40;  
+    return getMappedJoystickValueWithDelay(3);  
+}
+
+int getMappedJoystickValueWithDelay(int index) {
+  if (index > 3 || index < 0) {
+    return 0;
+  }
+
+  int val = joystickMappedValues[index];
+
+  if (val != 0) {
+    return val;
+  }
+  
+  if (lastRepeat <= millis() - repeatDelay) {
+    lastRepeat = millis();
+    return 1;
+  }
+
+  return 0;
 }
 
 /*
