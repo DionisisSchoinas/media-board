@@ -85,7 +85,7 @@ void loop() {
     digitalWrite(BUTTON_2_LED_PIN, !digitalRead(BUTTON_2_LED_PIN));
   }
   
-  
+  // Consumer Play/Pause
   if (isFirstPress(button3)){
     Consumer.press(MEDIA_PLAY_PAUSE);
     Consumer.release(MEDIA_PLAY_PAUSE);
