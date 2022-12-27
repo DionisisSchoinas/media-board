@@ -12,13 +12,13 @@
 #define BUTTON_2_LED_PIN 4
 #define BUTTON_3_PIN 10
 
-#define VOLUME_ENCODER_CLK 0
-#define VOLUME_ENCODER_DT  2
-#define VOLUME_ENCODER_SW  3
+#define VOLUME_ENCODER_CLK 7
+#define VOLUME_ENCODER_DT  6
+#define VOLUME_ENCODER_SW  14
 
-#define ZOOM_ENCODER_CLK 7
-#define ZOOM_ENCODER_DT  6
-#define ZOOM_ENCODER_SW  14
+#define ZOOM_ENCODER_CLK 0
+#define ZOOM_ENCODER_DT  2
+#define ZOOM_ENCODER_SW  3
 
 #define JOYSTICK_X A0
 #define JOYSTICK_Y A2
@@ -246,6 +246,15 @@ bool isFirstPress(AdvancedDigitalPin &b) {
 }
 
 int checkEncoderRotation(AdvancedDigitalPin &clk, AdvancedDigitalPin &dt) {  
+  /*
+  Serial.print(clk.getCurrentPinState());
+  Serial.print(" == ");
+  Serial.print(clk.getState());
+  Serial.print(" || ");
+  Serial.print(dt.getCurrentPinState());
+  Serial.print(" == ");
+  Serial.println(dt.getState());
+  */
 	if (clk.getCurrentPinState() != clk.getState()) { // CLK has changed
     clk.setState();
     if (dt.getCurrentPinState() != dt.getState()) { // DT has changed
