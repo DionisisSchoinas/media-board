@@ -1,3 +1,9 @@
+# Components
+* Arduino Leonardo
+* Rotary Encoder Module Brick Sensor for Arduino KY-040 **(x2)**
+* Dual-axis XY PS2 Joystick Module For Arduino
+* B3F-4055 Push Button - Tactile Switch **(x3)**
+
 
 # Libraries
 * **HID-Project**  (https://github.com/NicoHood/HID)
@@ -120,3 +126,6 @@
         </tr>
     </tbody>
 </table>
+
+# Case for board
+* https://cad.onshape.com/documents/1678670135acec579791f1e6/w/d268f6e968565c454c48c0a6/e/9d956e916faef2dee325c757
