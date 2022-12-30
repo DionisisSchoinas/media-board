@@ -1,3 +1,6 @@
+# Important Information
+When Uploading code to the Arduino, the board needs to be reset for the Upload to succeed.
+
 # Components
 * Arduino Leonardo
 * Rotary Encoder Module Brick Sensor for Arduino KY-040 **(x2)**
