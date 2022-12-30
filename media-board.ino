@@ -3,6 +3,7 @@
 #include "AcceleratedRotary.h"
 
 #include "HID-Project.h"
+#include "avr/wdt.h"
 
 /* 
   ==== LEONARDO ====
@@ -51,6 +52,7 @@ int repeatDelay = 250;
 unsigned long lastRepeat = 0;
 
 void setup() {
+  wdt_disable();
   //Serial.begin(9600);
   Keyboard.begin();
   Mouse.begin();
@@ -64,13 +66,15 @@ void setup() {
   
   // Zoom rotary encoder
   attachInterrupt(digitalPinToInterrupt(ZOOM_ENCODER_CLK), zoomAdjust, CHANGE);
+
+  // Set Watchdog to expect an update every 1 second
+  wdt_enable(WDTO_1S);
 }
 
 void loop() {
-  // Reset every 48 hours, if a reset hasn't happened yet
-  if (millis() > 17280000) 
-    asm volatile ("jmp 0");
-  
+  // Tell Watchdog everything is fine
+  wdt_reset();
+
   // Left Ctrl + m
   if (isFirstPress(button1)) {
     Keyboard.press(KEY_LEFT_CTRL);
@@ -108,11 +112,10 @@ void loop() {
     Keyboard.releaseAll();
   }
   
-/*
+  // Resets by delaying for 2 seconds, this causes the Wathcdog to not receive an update (1 second max)
   if (isFirstPress(joystickSW)) {
-    // Joystick press
+    delay(2000);
   }
-  */
   
   detectJoystickMovement();
 }

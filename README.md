@@ -69,7 +69,7 @@
                         </tr>
                         <tr>
                             <td>Press</td>
-                            <td>-</td>
+                            <td>Resets Arduino</td>
                         </tr>
                     </tbody>
                 </table>
