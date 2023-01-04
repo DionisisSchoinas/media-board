@@ -113,7 +113,8 @@ void loop() {
   }
   
   // Resets by delaying for 2 seconds, this causes the Wathcdog to not receive an update (1 second max)
-  if (isFirstPress(joystickSW)) {
+  // Reset triggered by Joystick press OR every 96 hours
+  if (isFirstPress(joystickSW) || millis() > 345600000) {
     delay(2000);
   }
   
